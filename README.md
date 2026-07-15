@@ -1,13 +1,13 @@
 [🇬🇧 English](README.md) | [🇨🇳 中文](README-Chinese.md)
 
-# jwtools <img src="man/figures/logo_hex.png" align="right" height="150" alt="jwtools logo" />
+# jwtools (Jian Wu's tools) <img src="man/figures/logo_hex.png" align="right" height="150" alt="jwtools logo" />
 
 [![Website](https://img.shields.io/badge/website-jackng88.github.io-blue.svg)](https://jackng88.github.io/index.html)
 ![R-CMD-check](https://img.shields.io/badge/R-package-blue.svg)
 ![Version](https://img.shields.io/badge/version-0.1.0-brightgreen.svg)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)
 
-Personal collection of reusable R utility functions for computational biology workflows.
+`Jian Wu`'s Personal collection of reusable R utility functions for computational biology workflows.
 
 ## Motivation & Design Philosophy
 
@@ -39,7 +39,7 @@ into modular and reusable scripts**, so that:
 
 ## Table of Contents
 
-- [jwtools ](#jwtools-)
+- [jwtools (Jian Wu's tools) ](#jwtools-jian-wus-tools-)
   - [Motivation \& Design Philosophy](#motivation--design-philosophy)
   - [Table of Contents](#table-of-contents)
   - [Currently Implemented Functions](#currently-implemented-functions)

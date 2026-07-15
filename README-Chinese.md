@@ -1,6 +1,6 @@
 [🇬🇧 English](README.md) | [🇨🇳 中文](README-Chinese.md)
 
-# jwtools <img src="man/figures/logo_hex.png" align="right" height="150" alt="jwtools logo" />
+# jwtools (Jian Wu's tools) <img src="man/figures/logo_hex.png" align="right" height="150" alt="jwtools logo" />
 
 [![Website](https://img.shields.io/badge/website-jackng88.github.io-blue.svg)](https://jackng88.github.io/index.html)
 ![R-CMD-check](https://img.shields.io/badge/R-package-blue.svg)
@@ -34,7 +34,7 @@
 
 ## 目录
 
-- [jwtools ](#jwtools-)
+- [jwtools (Jian Wu's tools) ](#jwtools-jian-wus-tools-)
   - [设计初衷](#设计初衷)
   - [目录](#目录)
   - [目前已实现的函数](#目前已实现的函数)
