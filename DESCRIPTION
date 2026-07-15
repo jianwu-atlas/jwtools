@@ -12,7 +12,6 @@ Description: 个人科研常用小工具函数集合，方便以后直接 librar
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.1
 Imports:
     qs2,
     utils
@@ -21,3 +20,4 @@ Suggests:
 Config/testthat/edition: 3
 URL: https://github.com/JackNg88/jwtools
 BugReports: https://github.com/JackNg88/jwtools/issues
+Config/roxygen2/version: 8.0.0
