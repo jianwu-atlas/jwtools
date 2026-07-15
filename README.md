@@ -1,6 +1,6 @@
 [🇬🇧 English](README.md) | [🇨🇳 中文](README-Chinese.md)
 
-# jwtools
+# jwtools <img src="man/figures/logo_hex.png" align="right" height="150" alt="jwtools logo" />
 
 [![Website](https://img.shields.io/badge/website-jackng88.github.io-blue.svg)](https://jackng88.github.io/index.html)
 ![R-CMD-check](https://img.shields.io/badge/R-package-blue.svg)
@@ -39,7 +39,7 @@ into modular and reusable scripts**, so that:
 
 ## Table of Contents
 
-- [jwtools](#jwtools)
+- [jwtools ](#jwtools-)
   - [Motivation \& Design Philosophy](#motivation--design-philosophy)
   - [Table of Contents](#table-of-contents)
   - [Currently Implemented Functions](#currently-implemented-functions)
