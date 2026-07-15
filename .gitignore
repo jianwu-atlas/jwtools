@@ -1,0 +1,24 @@
+# ============================================
+# jwtools — .gitignore
+# ============================================
+
+# ---- 完全私有文件，永不推送到 GitHub ----
+README-unpublic.md
+
+# ---- R 相关标准忽略项 ----
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+
+# ---- R 包构建产物 ----
+*.tar.gz
+*.Rcheck/
+
+# ---- macOS 系统文件 ----
+.DS_Store
+**/.DS_Store
+
+# ---- 大型中间数据文件（按需保留或删除这行）----
+*.qs2
