@@ -1,3 +1,5 @@
+[🇬🇧 English](README.md) | [🇨🇳 中文](README-Chinese.md)
+
 # jwtools
 
 [![Website](https://img.shields.io/badge/website-jackng88.github.io-blue.svg)](https://jackng88.github.io/index.html)
