@@ -22,3 +22,4 @@ README-unpublic.md
 
 # ---- 大型中间数据文件（按需保留或删除这行）----
 *.qs2
+dev_notes/
