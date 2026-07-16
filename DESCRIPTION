@@ -1,13 +1,18 @@
 Package: jwtools
 Type: Package
 Title: Jian Wu's Personal R Utility Functions
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: person("Jian", "Wu", email = "Jian.Wu@innere.med.uni-giessen.de",
     role = c("aut", "cre"))
 Description: 个人科研常用小工具函数集合，方便以后直接 library(jwtools) 导入，
     不用每次都从旧脚本里复制粘贴。当前包含用 qs2 保存/恢复整个 R 工作环境
-    的 qs_save_workspace() / qs_load_workspace()，等价于更快、更小的
-    save()/load()，适合装有 Seurat 对象的大型单细胞分析环境。以后新写的
+    的 qs_save_workspace() / qs_load_workspace()（等价于更快、更小的
+    save()/load()，适合装有 Seurat 对象的大型单细胞分析环境）；
+    ct_proportion_analysis()，用于 donor-level 细胞类型比例的分组统计
+    检验（Kruskal-Wallis + 两两 Wilcoxon）与可视化，支持 dataset/batch
+    来源的散点叠加诊断；rename_dataset_origin()，用于将 Seurat 对象
+    metadata 中的 dataset_origin 标准化为 "FirstAuthor_Year" 引用格式；
+    以及 save_dual()，用于同时保存 PDF + PNG 双格式图片。以后新写的
     小工具函数可以继续往 R/ 目录里加。
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -18,10 +23,12 @@ Imports:
     ggplot2,
     ggpubr,
     ggrepel,
+    grid,
     qs2,
     RColorBrewer,
     rstatix,
     scales,
+    stats,
     tibble,
     tidyr,
     utils
