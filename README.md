@@ -4,7 +4,7 @@
 
 [![Website](https://img.shields.io/badge/website-jackng88.github.io-blue.svg)](https://jackng88.github.io/index.html)
 ![R-CMD-check](https://img.shields.io/badge/R-package-blue.svg)
-![Version](https://img.shields.io/badge/version-0.1.0-brightgreen.svg)
+![Version](https://img.shields.io/badge/version-0.2.0-brightgreen.svg)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)
 
 `Jian Wu`'s Personal collection of reusable R utility functions for computational biology workflows.
@@ -30,10 +30,14 @@ into modular and reusable scripts**, so that:
 - new team members (or future-me, six months later) can understand *why*
   a function exists, not just *how* to call it.
 
-> **Current status:** the package is in an early, actively-growing stage.
-> As of now it contains a small set of workspace I/O utilities (see below).
-> Additional modules for bulk RNA-seq, ATAC-seq/ChIP-seq, spatial transcriptomics,
-> and single-cell analysis are planned — see [Roadmap](#roadmap).
+> **Current status (v0.2.0):** in addition to the original workspace I/O
+> utilities, this release adds a donor-level **cell-type proportion analysis
+> toolkit** (`ct_proportion_analysis()`), a **dataset-origin naming
+> standardizer** (`rename_dataset_origin()`), and a **dual PDF+PNG
+> figure-saving helper** (`save_dual()`) — see below.
+> Additional modules for bulk RNA-seq, ATAC-seq/ChIP-seq, spatial
+> transcriptomics, and further single-cell analysis are planned — see
+> [Roadmap](#roadmap).
 
 ---
 
@@ -62,6 +66,9 @@ into modular and reusable scripts**, so that:
 |---|---|---|
 | `qs_save_workspace()` | Serialize **all objects in the current environment** into a single `.qs2` file | `save(list = ls(all = TRUE), file = "xxx.RData")` |
 | `qs_load_workspace()` | Restore **all objects** from a `.qs2` file back into the environment | `load("xxx.RData")` |
+| `ct_proportion_analysis()` | Compute **donor-level cell-type proportions**, run Kruskal–Wallis (overall) + pairwise Wilcoxon (BH-adjusted) tests across a grouping variable (e.g. age group), and generate a faceted boxplot+jitter figure with optional dataset/batch-origin point overlay for batch-effect diagnostics | Manual `rstatix`/`ggpubr` scripts copy-pasted per project |
+| `rename_dataset_origin()` | Standardize the `dataset_origin` column in Seurat object metadata to a consistent `"FirstAuthor_Year"` citation format | Manual `case_when()`/`recode()` lookup tables rewritten each time |
+| `save_dual()` | Save a `ggplot2` plot **simultaneously as `.pdf` and `.png`**, with a single function call and consistent width/height/DPI settings | Two separate `ggsave()` calls with duplicated arguments |
 
 ### Why `.qs2` instead of base R `.RData`?
 
@@ -110,41 +117,86 @@ the latest version — no manual file copying needed.
 ```r
 library(jwtools)
 
-# ---------------------------------------------------------------------
+# =======================================================================
+# Workspace I/O
+# =======================================================================
+
 # 1. Save the ENTIRE current workspace
 #    (equivalent to base R: save(list = ls(all = TRUE), file = ...))
 #    Recommended at natural checkpoints in a long analysis pipeline
 #    (e.g. right after cell-type annotation, before starting DE testing).
-# ---------------------------------------------------------------------
 qs_save_workspace("core_WT_YMO_workspace.qs2", nthreads = 14)
 
-# ---------------------------------------------------------------------
 # 2. Exclude specific large objects that are already saved separately
 #    (avoids duplicating disk space for objects like a full Seurat object
 #    that has its own dedicated .qs2/.rds checkpoint).
-# ---------------------------------------------------------------------
 qs_save_workspace(
   "core_WT_YMO_workspace.qs2",
   nthreads = 14,
   exclude = c("immune.combined")
 )
 
-# ---------------------------------------------------------------------
 # 3. Exclude a batch of objects by regex pattern
 #    (e.g. transient ggplot objects "p_xxx", scratch variables "tmp_xxx",
 #    or intermediate figure objects "fig1", "fig2", ...).
-# ---------------------------------------------------------------------
 qs_save_workspace(
   "core_WT_YMO_workspace.qs2",
   nthreads = 14,
   exclude_pattern = "^p_|^tmp_|^fig[0-9]"
 )
 
-# ---------------------------------------------------------------------
 # 4. Restore the workspace on the same or a different machine
 #    (e.g. moving from an HPC/SLURM node to a local Mac for plotting).
-# ---------------------------------------------------------------------
 qs_load_workspace("core_WT_YMO_workspace.qs2", nthreads = 14)
+
+
+# =======================================================================
+# Cell-type proportion analysis (donor-level, with pairwise stats
+# and dataset/batch-origin overlay)
+# =======================================================================
+
+res <- ct_proportion_analysis(
+  seurat_obj      = immune.combined,
+  celltype_col    = "Manuscript_Identity",
+  sample_col      = "sample",
+  group_col       = "AgeGroup_short",
+  group_levels    = c("Y", "M", "O"),
+  dataset_col     = "dataset_origin",
+  celltype_order  = c("EC", "Epi", "B", "DC", "Mac", "Mono", "NK", "T", "Fib", "SMC"),
+  celltype_colors = cols,               # reuse the same color vector as your main UMAP
+  output_prefix   = "28_ExtFig1F"
+)
+
+# Access individual results:
+res$plot            # main boxplot+jitter ggplot object (also auto-saved as PDF+PNG)
+res$prop_df          # donor-level proportion table (also auto-saved as .csv)
+res$kw_test          # Kruskal-Wallis overall test per cell type
+res$pairwise_test    # pairwise Wilcoxon test (BH-adjusted) per cell type
+res$stat_test         # full stats table incl. bracket coordinates for plotting
+
+
+# =======================================================================
+# Standardizing dataset_origin metadata
+# =======================================================================
+
+# Convert raw/inconsistent dataset labels into "FirstAuthor_Year" format
+seurat_obj$dataset_origin <- rename_dataset_origin(seurat_obj$dataset_origin)
+
+
+# =======================================================================
+# Saving figures in both PDF and PNG
+# =======================================================================
+
+p <- ggplot2::ggplot(mtcars, ggplot2::aes(wt, mpg)) + ggplot2::geom_point()
+
+save_dual(
+  filename_prefix = "figures/scatter_wt_mpg",   # no extension needed
+  plot            = p,
+  width           = 6,
+  height          = 5,
+  dpi             = 300
+)
+# → writes figures/scatter_wt_mpg.pdf AND figures/scatter_wt_mpg.png
 ```
 
 Full function documentation is available via:
@@ -152,6 +204,9 @@ Full function documentation is available via:
 ```r
 ?qs_save_workspace
 ?qs_load_workspace
+?ct_proportion_analysis
+?rename_dataset_origin
+?save_dual
 ```
 
 ---
@@ -166,10 +221,10 @@ here first, then moved to "Currently Implemented Functions" once merged.
 | Planned module | Intended scope |
 |---|---|
 | **Bulk RNA-seq utilities** | `DESeq2` design/contrast wrappers, GO/KEGG batch enrichment, family-level count aggregation, publication-ready volcano plots |
-| **Bulk ATAC-seq / ChIP-seq utilities** | Peak annotation (gene), differential accessibility wrappers, TSS/metagene signal profile plotting,  KRAB-ZNF binding) |
+| **Bulk ATAC-seq / ChIP-seq utilities** | Peak annotation (gene), differential accessibility wrappers, TSS/metagene signal profile plotting, KRAB-ZNF binding site analysis |
 | **Spatial transcriptomics (10x Visium/Xenium)** | Standardized loading & QC, spatial feature/module-score overlay plotting, cell-type deconvolution visualization |
 | **Single-cell / single-nucleus utilities** | QC filtering helpers, Harmony/Seurat v5 integration wrappers, marker-based lineage annotation, signed-log `AddModuleScore()` wrapper, pseudobulk DE aggregation |
-| **Shared visualization utilities** | Themed `ggplot2`/`ComplexHeatmap`/`pheatmap` wrappers, dual `.png` + `.pdf` saving helper, consistent color palettes across projects |
+| **Shared visualization utilities** | Themed `ggplot2`/`ComplexHeatmap`/`pheatmap` wrappers with consistent color palettes across projects (`save_dual()` for PDF+PNG export already implemented in v0.2.0) |
 
 > Each module will follow the same principle: a function is added here
 > **only after being used and validated in a real analysis**, ensuring every
@@ -206,24 +261,34 @@ This workflow means `NAMESPACE` and help files never need to be hand-edited —
 
 ## Dependencies
 
-Core dependency (required):
+Core dependencies (required, from `DESCRIPTION`):
 
 - [`qs2`](https://cran.r-project.org/package=qs2) — fast, multi-threaded
   serialization backend used by `qs_save_workspace()` / `qs_load_workspace()`
+- `dplyr`, `tibble`, `tidyr` — data wrangling for `ct_proportion_analysis()`
+  and `rename_dataset_origin()`
+- `ggplot2`, `ggpubr`, `ggh4x`, `ggrepel`, `RColorBrewer`, `scales`, `grid` —
+  plotting backbone for `ct_proportion_analysis()` and `save_dual()`
+- `rstatix` — Kruskal–Wallis / pairwise Wilcoxon statistical testing in
+  `ct_proportion_analysis()`
+- `stats`, `utils` — base R statistical/utility functions
 
 Optional (for running package tests):
 
 - `testthat` (>= 3.0.0)
 
 ```r
-install.packages("qs2")
+install.packages(c(
+  "qs2", "dplyr", "ggh4x", "ggplot2", "ggpubr", "ggrepel",
+  "RColorBrewer", "rstatix", "scales", "tibble", "tidyr"
+))
 ```
 
 Future modules (see [Roadmap](#roadmap)) will introduce additional
 dependencies as they are implemented, e.g. `Seurat` (>= 5.0.0), `DESeq2`,
-`ChIPseeker`, `Squidpy`/`Giotto` interfaces, `ggplot2`, `ComplexHeatmap`,
-and `clusterProfiler`. These will be documented per-function via roxygen2
-`@importFrom` tags and reflected in `DESCRIPTION` at that time.
+`ChIPseeker`, `Squidpy`/`Giotto` interfaces, and `ComplexHeatmap`. These
+will be documented per-function via roxygen2 `@importFrom` tags and
+reflected in `DESCRIPTION` at that time.
 
 ---
 
@@ -232,6 +297,7 @@ and `clusterProfiler`. These will be documented per-function via roxygen2
 **Jian (Jack Ng) Wu**
 Cardio-Pulmonary Institute (CPI) & Max Planck Institute for Heart and Lung Research & DZL DataLung School
 
+- ✉️ Email: [Jian.Wu@mpi-bn.mpg.de](mailto:Jian.Wu@mpi-bn.mpg.de)
 - 🌐 Website: [jackng88.github.io](https://jackng88.github.io/index.html)
 - GitHub: [github.com/JackNg88](https://github.com/JackNg88)
 - Google Scholar: [scholar.google.com/citations?user=-pYIKQkAAAAJ](https://scholar.google.com/citations?user=-pYIKQkAAAAJ&hl)

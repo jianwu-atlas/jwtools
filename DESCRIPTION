@@ -2,7 +2,7 @@ Package: jwtools
 Type: Package
 Title: Jian Wu's Personal R Utility Functions
 Version: 0.2.0
-Authors@R: person("Jian", "Wu", email = "Jian.Wu@innere.med.uni-giessen.de",
+Authors@R: person("Jian", "Wu", email = "Jian.Wu@mpi-bn.mpg.de",
     role = c("aut", "cre"))
 Description: 个人科研常用小工具函数集合，方便以后直接 library(jwtools) 导入，
     不用每次都从旧脚本里复制粘贴。当前包含用 qs2 保存/恢复整个 R 工作环境

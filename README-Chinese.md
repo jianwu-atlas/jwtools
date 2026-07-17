@@ -4,7 +4,7 @@
 
 [![Website](https://img.shields.io/badge/website-jackng88.github.io-blue.svg)](https://jackng88.github.io/index.html)
 ![R-CMD-check](https://img.shields.io/badge/R-package-blue.svg)
-![Version](https://img.shields.io/badge/version-0.1.0-brightgreen.svg)
+![Version](https://img.shields.io/badge/version-0.2.0-brightgreen.svg)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)
 
 个人科研常用 R 小工具函数集合。
@@ -25,9 +25,12 @@
 - 让团队新成员（或者半年后的自己）能理解某个函数*为什么*这样写，
   而不只是知道*怎么调用*它。
 
-> **当前状态：** 这个包目前处于早期、持续生长阶段。现在只包含一小组
-> workspace 读写工具函数（见下文）。计划中还有针对 bulk RNA-seq、
-> ATAC-seq/ChIP-seq、空间转录组以及单细胞分析的更多模块——详见
+> **当前状态（v0.2.0）：** 除了最初的 workspace 读写工具外，这个版本
+> 新增了 donor-level 的**细胞类型比例分析工具**
+> （`ct_proportion_analysis()`）、**dataset 来源命名标准化函数**
+> （`rename_dataset_origin()`），以及**PDF+PNG 双格式图片保存辅助函数**
+> （`save_dual()`）——详见下文。计划中还有针对 bulk RNA-seq、
+> ATAC-seq/ChIP-seq、空间转录组以及更多单细胞分析的模块——详见
 > [Roadmap](#roadmap)。
 
 ---
@@ -57,6 +60,9 @@
 |---|---|---|
 | `qs_save_workspace()` | 把当前环境所有变量存成一个 `.qs2` 文件 | `save(list = ls(all=TRUE), file = "xxx.RData")` |
 | `qs_load_workspace()` | 从 `.qs2` 文件恢复所有变量 | `load("xxx.RData")` |
+| `ct_proportion_analysis()` | 计算 **donor-level 细胞类型比例**，在指定分组变量（如年龄组）之间进行 Kruskal-Wallis 总检验 + 两两 Wilcoxon 检验（BH校正），并生成 facet boxplot+jitter 图，可选叠加 dataset/batch 来源散点用于批次效应诊断 | 每个项目手动复制粘贴的 `rstatix`/`ggpubr` 脚本 |
+| `rename_dataset_origin()` | 将 Seurat 对象 metadata 中的 `dataset_origin` 列统一标准化为 `"FirstAuthor_Year"` 引用格式 | 每次都要重写的 `case_when()`/`recode()` 对照表 |
+| `save_dual()` | 一次函数调用**同时保存 `.pdf` 和 `.png`** 两种格式的图片，宽高/DPI 设置保持一致 | 两次分别调用 `ggsave()`，参数重复 |
 
 ### 为什么用 `.qs2` 而不是原生 R 的 `.RData`？
 
@@ -103,41 +109,85 @@ remotes::install_github("JackNg88/jwtools")
 ```r
 library(jwtools)
 
-# ---------------------------------------------------------------------
+# =======================================================================
+# Workspace 读写
+# =======================================================================
+
 # 1. 保存整个当前工作环境
 #    （等价于原生 R 的：save(list = ls(all = TRUE), file = ...)）
 #    建议在分析流程的自然节点使用（比如细胞类型注释完成后、
 #    正式开始差异表达分析之前）。
-# ---------------------------------------------------------------------
 qs_save_workspace("core_WT_YMO_workspace.qs2", nthreads = 14)
 
-# ---------------------------------------------------------------------
 # 2. 排除已经单独存过的大对象
 #    （避免像完整 Seurat 对象这种已有独立 .qs2/.rds checkpoint 的
 #    大文件被重复保存、浪费磁盘空间）。
-# ---------------------------------------------------------------------
 qs_save_workspace(
   "core_WT_YMO_workspace.qs2",
   nthreads = 14,
   exclude = c("immune.combined")
 )
 
-# ---------------------------------------------------------------------
 # 3. 按正则表达式批量排除一批变量
 #    （比如所有临时的 ggplot 对象 "p_xxx"、临时变量 "tmp_xxx"，
 #    或者中间过程的图对象 "fig1"、"fig2" 等）。
-# ---------------------------------------------------------------------
 qs_save_workspace(
   "core_WT_YMO_workspace.qs2",
   nthreads = 14,
   exclude_pattern = "^p_|^tmp_|^fig[0-9]"
 )
 
-# ---------------------------------------------------------------------
 # 4. 在同一台或另一台机器上恢复工作环境
 #    （比如从 HPC/SLURM 节点迁移到本地 Mac 上继续画图）。
-# ---------------------------------------------------------------------
 qs_load_workspace("core_WT_YMO_workspace.qs2", nthreads = 14)
+
+
+# =======================================================================
+# 细胞类型比例分析（donor-level，含两两统计检验与 dataset/batch 叠加）
+# =======================================================================
+
+res <- ct_proportion_analysis(
+  seurat_obj      = immune.combined,
+  celltype_col    = "Manuscript_Identity",
+  sample_col      = "sample",
+  group_col       = "AgeGroup_short",
+  group_levels    = c("Y", "M", "O"),
+  dataset_col     = "dataset_origin",
+  celltype_order  = c("EC", "Epi", "B", "DC", "Mac", "Mono", "NK", "T", "Fib", "SMC"),
+  celltype_colors = cols,               # 复用你主UMAP的配色向量
+  output_prefix   = "28_ExtFig1F"
+)
+
+# 分别取用结果：
+res$plot            # 主图 ggplot 对象（同时会自动保存 PDF+PNG）
+res$prop_df          # donor-level 比例明细表（同时会自动保存 .csv）
+res$kw_test          # 每个 celltype 的 Kruskal-Wallis 总检验结果
+res$pairwise_test    # 每个 celltype 的两两 Wilcoxon 检验结果（BH校正）
+res$stat_test         # 含画图坐标的完整统计表
+
+
+# =======================================================================
+# 标准化 dataset_origin 元数据
+# =======================================================================
+
+# 把原始/不一致的数据集标签统一转换成 "FirstAuthor_Year" 格式
+seurat_obj$dataset_origin <- rename_dataset_origin(seurat_obj$dataset_origin)
+
+
+# =======================================================================
+# 同时保存 PDF 和 PNG 两种格式的图片
+# =======================================================================
+
+p <- ggplot2::ggplot(mtcars, ggplot2::aes(wt, mpg)) + ggplot2::geom_point()
+
+save_dual(
+  filename_prefix = "figures/scatter_wt_mpg",   # 不需要写扩展名
+  plot            = p,
+  width           = 6,
+  height          = 5,
+  dpi             = 300
+)
+# → 会同时生成 figures/scatter_wt_mpg.pdf 和 figures/scatter_wt_mpg.png
 ```
 
 完整函数文档可以通过以下命令查看：
@@ -145,6 +195,9 @@ qs_load_workspace("core_WT_YMO_workspace.qs2", nthreads = 14)
 ```r
 ?qs_save_workspace
 ?qs_load_workspace
+?ct_proportion_analysis
+?rename_dataset_origin
+?save_dual
 ```
 
 ---
@@ -161,7 +214,7 @@ qs_load_workspace("core_WT_YMO_workspace.qs2", nthreads = 14)
 | **Bulk ATAC-seq / ChIP-seq 工具** | Peak 基因注释、差异可及性检验封装、TSS/metagene 信号谱图绘制、KRAB-ZNF 结合位点富集分析 |
 | **空间转录组（10x Visium/Xenium）** | 标准化的数据加载与 QC、空间 feature/module score 叠加绘图、细胞类型解卷积可视化 |
 | **单细胞/单核工具** | QC 过滤辅助函数、Harmony/Seurat v5 整合封装、基于marker的谱系注释、signed-log 版本的 `AddModuleScore()` 封装、pseudobulk 差异表达聚合 |
-| **通用可视化工具** | 统一风格的 `ggplot2`/`ComplexHeatmap`/`pheatmap` 封装、同时保存 `.png` + `.pdf` 的辅助函数、跨项目一致的配色方案 |
+| **通用可视化工具** | 统一风格的 `ggplot2`/`ComplexHeatmap`/`pheatmap` 封装、跨项目一致的配色方案（同时保存 `.png` + `.pdf` 的 `save_dual()` 已在 v0.2.0 实现） |
 
 > 每个模块都遵循同一个原则：**只有在真实分析中被使用、验证过之后**，
 > 函数才会被加进这个包，确保 `jwtools` 里导出的每一个函数都是经过
@@ -197,23 +250,33 @@ devtools::check()      # 可选，检查包有没有结构性问题
 
 ## 依赖
 
-核心依赖（必需）：
+核心依赖（必需，来自 `DESCRIPTION`）：
 
 - [`qs2`](https://cran.r-project.org/package=qs2) —— `qs_save_workspace()` /
   `qs_load_workspace()` 使用的快速多线程序列化后端
+- `dplyr`、`tibble`、`tidyr` —— `ct_proportion_analysis()` 和
+  `rename_dataset_origin()` 的数据整理
+- `ggplot2`、`ggpubr`、`ggh4x`、`ggrepel`、`RColorBrewer`、`scales`、`grid` ——
+  `ct_proportion_analysis()` 和 `save_dual()` 的绘图基础
+- `rstatix` —— `ct_proportion_analysis()` 中的 Kruskal-Wallis / 两两
+  Wilcoxon 统计检验
+- `stats`、`utils` —— 基础 R 统计/工具函数
 
 可选依赖（跑包测试用）：
 
 - `testthat` (>= 3.0.0)
 
 ```r
-install.packages("qs2")
+install.packages(c(
+  "qs2", "dplyr", "ggh4x", "ggplot2", "ggpubr", "ggrepel",
+  "RColorBrewer", "rstatix", "scales", "tibble", "tidyr"
+))
 ```
 
 未来的模块（见 [Roadmap](#roadmap)）实现后会引入更多依赖，比如
-`Seurat` (>= 5.0.0)、`DESeq2`、`ChIPseeker`、`Squidpy`/`Giotto` 接口、
-`ggplot2`、`ComplexHeatmap` 和 `clusterProfiler`。这些依赖到时候会通过
-roxygen2 的 `@importFrom` 标签逐函数记录，并同步更新到 `DESCRIPTION` 中。
+`Seurat` (>= 5.0.0)、`DESeq2`、`ChIPseeker`、`Squidpy`/`Giotto` 接口，
+以及 `ComplexHeatmap`。这些依赖到时候会通过 roxygen2 的
+`@importFrom` 标签逐函数记录，并同步更新到 `DESCRIPTION` 中。
 
 ---
 
@@ -222,6 +285,7 @@ roxygen2 的 `@importFrom` 标签逐函数记录，并同步更新到 `DESCRIPTI
 **Jian (Jack Ng) Wu**
 Cardio-Pulmonary Institute (CPI) & Max Planck Institute for Heart and Lung Research & DZL DataLung School
 
+- ✉️ 邮箱：[Jian.Wu@mpi-bn.mpg.de](mailto:Jian.Wu@mpi-bn.mpg.de)
 - 🌐 个人网站：[jackng88.github.io](https://jackng88.github.io/index.html)
 - GitHub：[github.com/JackNg88](https://github.com/JackNg88)
 - Google Scholar：[scholar.google.com/citations?user=-pYIKQkAAAAJ](https://scholar.google.com/citations?user=-pYIKQkAAAAJ&hl)
