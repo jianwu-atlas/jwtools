@@ -9,6 +9,7 @@ rename_dataset_origin(
   seurat_obj,
   old_levels = c("Kaminski_2020_Adams", "Banovich_2019_Habermann", "Banovich_2023_Natri"),
   new_labels = c("Adams_2020", "Habermann_2020", "Natri_2024"),
+  keep_unmapped = FALSE,
   backup = TRUE,
   backup_path = "backup_before_rename_dataset_origin.rds",
   verbose = TRUE
@@ -18,6 +19,7 @@ rename_dataset_origin(
   seurat_obj,
   old_levels = c("Kaminski_2020_Adams", "Banovich_2019_Habermann", "Banovich_2023_Natri"),
   new_labels = c("Adams_2020", "Habermann_2020", "Natri_2024"),
+  keep_unmapped = FALSE,
   backup = TRUE,
   backup_path = "backup_before_rename_dataset_origin.rds",
   verbose = TRUE
@@ -31,6 +33,10 @@ rename_dataset_origin(
 
 \item{new_labels}{Character vector. 新的标准化标签，按位置与 `old_levels` 一一对应。
 长度必须与 `old_levels` 一致。}
+
+\item{keep_unmapped}{Logical. 若为 `TRUE`，`dataset_origin` 中未出现在
+`old_levels` 里的原始值会被保留（原样保留原值），而不是被强制转为 `NA`。
+默认为 `FALSE`（保持与旧版本行为一致，但会先给出明确警告）。}
 
 \item{backup}{Logical. 若为 `TRUE`（默认），在修改前保存一份 `.rds` 备份。}
 
@@ -53,7 +59,8 @@ rename_dataset_origin(
 将 Seurat 对象 metadata 中的 `dataset_origin` 列标准化为学界通用的
 "第一作者_年份" 引用格式（如 "Habermann et al. 2020"）。
 由于这是永久性修改 metadata 的关键步骤，会影响所有下游分析和图表 legend，
-函数默认在修改前自动备份原始对象。
+函数默认在修改前自动备份原始对象，并对未被映射覆盖的原始值给出警告，
+避免 `factor()` 重新赋值时静默产生 NA 导致数据丢失。
 }
 \details{
 默认重命名方案（LungAgingERV 项目）：
@@ -73,6 +80,13 @@ rename_dataset_origin(
   \item `Banovich_2023_Natri` -> `Natri_2024`（Nat Genet, Banovich lab, TGen；
         注：年份已订正，正式发表于2024年3月，非2023）
 }
+
+安全机制：
+\itemize{
+  \item 若 `old_levels` 中某个值在数据里不存在 -> 给出 warning（原有行为）。
+  \item 若数据中存在未被 `old_levels` 覆盖的值 -> 给出 warning，
+        并根据 `keep_unmapped` 决定是保留原值还是转为 NA。
+}
 }
 \examples{
 \dontrun{
@@ -91,11 +105,12 @@ immune.combined <- rename_dataset_origin(
 # 使用默认映射
 immune.combined <- rename_dataset_origin(immune.combined)
 
-# 自定义映射（用于其他项目）
+# 自定义映射（用于其他项目，如 HeartERVmap / PH-ERVAtlas）
 immune.combined <- rename_dataset_origin(
   immune.combined,
   old_levels = c("A", "B"),
-  new_labels = c("X_2020", "Y_2021")
+  new_labels = c("X_2020", "Y_2021"),
+  keep_unmapped = TRUE
 )
 }
 
