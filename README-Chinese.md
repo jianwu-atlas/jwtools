@@ -6,6 +6,8 @@
 ![R-CMD-check](https://img.shields.io/badge/R-package-blue.svg)
 ![Version](https://img.shields.io/badge/version-0.2.0-brightgreen.svg)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)
+[![Views](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/JackNg88/jwtools/main/traffic_report/badge_views.json)](https://github.com/JackNg88/jwtools/graphs/traffic)
+[![Clones](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/JackNg88/jwtools/main/traffic_report/badge_clones.json)](https://github.com/JackNg88/jwtools/graphs/traffic)
 
 个人科研常用 R 小工具函数集合。
 
@@ -277,6 +279,17 @@ install.packages(c(
 `Seurat` (>= 5.0.0)、`DESeq2`、`ChIPseeker`、`Squidpy`/`Giotto` 接口，
 以及 `ComplexHeatmap`。这些依赖到时候会通过 roxygen2 的
 `@importFrom` 标签逐函数记录，并同步更新到 `DESCRIPTION` 中。
+
+---
+
+## 仓库访问统计
+
+浏览量和克隆量通过一个定时 GitHub Action 自动追踪（见
+`.github/workflows/traffic-tracker.yml`），每 10 天调用一次 GitHub Traffic
+API，并把历史数据累积保存在 `traffic_report/` 中，从而突破官方 API
+仅保留最近 14 天数据的限制。
+
+![月度流量趋势](traffic_report/monthly_trend.png)
 
 ---
 

@@ -6,6 +6,8 @@
 ![R-CMD-check](https://img.shields.io/badge/R-package-blue.svg)
 ![Version](https://img.shields.io/badge/version-0.2.0-brightgreen.svg)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)
+[![Views](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/JackNg88/jwtools/main/traffic_report/badge_views.json)](https://github.com/JackNg88/jwtools/graphs/traffic)
+[![Clones](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/JackNg88/jwtools/main/traffic_report/badge_clones.json)](https://github.com/JackNg88/jwtools/graphs/traffic)
 
 `Jian Wu`'s Personal collection of reusable R utility functions for computational biology workflows.
 
@@ -289,6 +291,17 @@ dependencies as they are implemented, e.g. `Seurat` (>= 5.0.0), `DESeq2`,
 `ChIPseeker`, `Squidpy`/`Giotto` interfaces, and `ComplexHeatmap`. These
 will be documented per-function via roxygen2 `@importFrom` tags and
 reflected in `DESCRIPTION` at that time.
+
+---
+
+## Repo Traffic
+
+Views and clones are tracked automatically via a scheduled GitHub Action
+(see `.github/workflows/traffic-tracker.yml`) that pulls the GitHub Traffic
+API every 10 days and accumulates the history in `traffic_report/`,
+overcoming the API's native 14-day retention limit.
+
+![Monthly Traffic Trend](traffic_report/monthly_trend.png)
 
 ---
 
