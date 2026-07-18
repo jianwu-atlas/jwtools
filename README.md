@@ -57,6 +57,7 @@ into modular and reusable scripts**, so that:
   - [Roadmap](#roadmap)
   - [Adding New Functions (Developer Guide)](#adding-new-functions-developer-guide)
   - [Dependencies](#dependencies)
+  - [Repo Traffic](#repo-traffic)
   - [Author \& Contact](#author--contact)
   - [License](#license)
 
@@ -307,11 +308,11 @@ overcoming the API's native 14-day retention limit.
 
 ## Author & Contact
 
-**Jian (Jack Ng) Wu**
+**Jian Wu (Jack Ng)**
 Cardio-Pulmonary Institute (CPI) & Max Planck Institute for Heart and Lung Research & DZL DataLung School
 
 - ✉️ Email: [Jian.Wu@mpi-bn.mpg.de](mailto:Jian.Wu@mpi-bn.mpg.de)
-- 🌐 Website: [jackng88.github.io](https://jackng88.github.io/index.html)
+- 🌐 Homepage: [jackng88.github.io](https://jackng88.github.io/index.html)
 - GitHub: [github.com/JackNg88](https://github.com/JackNg88)
 - Google Scholar: [scholar.google.com/citations?user=-pYIKQkAAAAJ](https://scholar.google.com/citations?user=-pYIKQkAAAAJ&hl)
 - ORCID: [0000-0003-4720-2374](https://orcid.org/0000-0003-4720-2374)
