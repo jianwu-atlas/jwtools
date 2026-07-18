@@ -136,6 +136,42 @@ def plot_trend(monthly: pd.DataFrame, outpath: str, repo_label: str):
     plt.close(fig)
 
 
+def generate_badge_json(combined: pd.DataFrame, outdir: str, days: int = 14):
+    """生成 shields.io endpoint 格式的 badge.json，展示最近N天的独立访客数。
+
+    README 中引用方式：
+    ![Views](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/<owner>/<repo>/main/traffic_report/badge_views.json)
+    ![Clones](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/<owner>/<repo>/main/traffic_report/badge_clones.json)
+    """
+    if combined.empty:
+        return
+
+    recent = combined[combined["date"] >= combined["date"].max() - pd.Timedelta(days=days - 1)]
+    views_unique = int(recent["views_unique"].sum())
+    clones_unique = int(recent["clones_unique"].sum())
+
+    views_badge = {
+        "schemaVersion": 1,
+        "label": f"views (last {days}d)",
+        "message": str(views_unique),
+        "color": "blue",
+    }
+    clones_badge = {
+        "schemaVersion": 1,
+        "label": f"clones (last {days}d)",
+        "message": str(clones_unique),
+        "color": "orange",
+    }
+
+    import json
+    with open(os.path.join(outdir, "badge_views.json"), "w") as f:
+        json.dump(views_badge, f)
+    with open(os.path.join(outdir, "badge_clones.json"), "w") as f:
+        json.dump(clones_badge, f)
+
+    print(f"徽章 JSON 已生成: badge_views.json (views={views_unique}), badge_clones.json (clones={clones_unique})")
+
+
 def main():
     parser = argparse.ArgumentParser(description="拉取并累积 GitHub 仓库 Traffic 数据，生成月度趋势图")
     parser.add_argument("--owner", required=True, help="仓库所有者，如 JackNg88")
@@ -156,6 +192,8 @@ def main():
 
     combined = update_history(new_df, args.history_csv)
     print(f"历史数据已更新: {args.history_csv}（累计 {len(combined)} 天）")
+
+    generate_badge_json(combined, args.outdir)
 
     monthly = aggregate_monthly(combined)
     monthly_csv = os.path.join(args.outdir, "monthly_summary.csv")
