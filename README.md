@@ -2,7 +2,7 @@
 
 # jwtools (Jian Wu's tools) <img src="man/figures/logo_hex.png" align="right" height="150" alt="jwtools logo" />
 
-[![Website](https://img.shields.io/badge/website-jianwu-atlas.github.io-blue.svg)](https://jianwu-atlas.github.io/index.html)
+[![Website](https://img.shields.io/badge/website-jianwu--atlas.github.io-blue.svg)](https://jianwu-atlas.github.io/index.html)
 ![R-CMD-check](https://img.shields.io/badge/R-package-blue.svg)
 ![Version](https://img.shields.io/badge/version-0.2.0-brightgreen.svg)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)
