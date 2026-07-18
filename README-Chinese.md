@@ -6,8 +6,8 @@
 ![R-CMD-check](https://img.shields.io/badge/R-package-blue.svg)
 ![Version](https://img.shields.io/badge/version-0.2.0-brightgreen.svg)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)
-[![Views](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/JackNg88/jwtools/main/traffic_report/badge_views.json)](https://github.com/JackNg88/jwtools/graphs/traffic)
-[![Clones](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/JackNg88/jwtools/main/traffic_report/badge_clones.json)](https://github.com/JackNg88/jwtools/graphs/traffic)
+[![Views](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/jianwu-atlas/jwtools/main/traffic_report/badge_views.json)](https://github.com/jianwu-atlas/jwtools/graphs/traffic)
+[![Clones](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/jianwu-atlas/jwtools/main/traffic_report/badge_clones.json)](https://github.com/jianwu-atlas/jwtools/graphs/traffic)
 
 个人科研常用 R 小工具函数集合。
 
@@ -97,11 +97,11 @@ devtools::install_local("path/to/jwtools")
 
 ```r
 install.packages("remotes")   # 如果还没装过
-remotes::install_github("JackNg88/jwtools")
+remotes::install_github("jianwu-atlas/jwtools")
 ```
 
 改了函数、推送到 GitHub 之后，其他机器上重新跑一次
-`remotes::install_github("JackNg88/jwtools")` 就能更新到最新版，
+`remotes::install_github("jianwu-atlas/jwtools")` 就能更新到最新版，
 不需要手动复制文件。
 
 ---
@@ -243,7 +243,7 @@ devtools::check()      # 可选，检查包有没有结构性问题
 ```
 
 3. 提交到 GitHub。在其他机器上重新跑一次
-   `remotes::install_github("JackNg88/jwtools")` 即可更新。
+   `remotes::install_github("jianwu-atlas/jwtools")` 即可更新。
 
 这样一来，`NAMESPACE` 和帮助文档都不需要手写——`devtools::document()`
 会根据 roxygen 注释自动生成。
@@ -300,7 +300,7 @@ Cardio-Pulmonary Institute (CPI) & Max Planck Institute for Heart and Lung Resea
 
 - ✉️ 邮箱：[Jian.Wu@mpi-bn.mpg.de](mailto:Jian.Wu@mpi-bn.mpg.de)
 - 🌐 个人网站：[jackng88.github.io](https://jackng88.github.io/index.html)
-- GitHub：[github.com/JackNg88](https://github.com/JackNg88)
+- GitHub：[github.com/jianwu-atlas](https://github.com/jianwu-atlas)
 - Google Scholar：[scholar.google.com/citations?user=-pYIKQkAAAAJ](https://scholar.google.com/citations?user=-pYIKQkAAAAJ&hl)
 - ORCID：[0000-0003-4720-2374](https://orcid.org/0000-0003-4720-2374)
 - LinkedIn：[linkedin.com/in/jackng833](https://www.linkedin.com/in/jackng833/)
