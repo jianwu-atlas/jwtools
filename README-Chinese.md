@@ -2,7 +2,7 @@
 
 # jwtools (Jian Wu's tools) <img src="man/figures/logo_hex.png" align="right" height="150" alt="jwtools logo" />
 
-[![Website](https://img.shields.io/badge/website-jackng88.github.io-blue.svg)](https://jackng88.github.io/index.html)
+[![Website](https://img.shields.io/badge/website-jianwu--atlas.github.io-blue.svg)](https://jianwu-atlas.github.io/index.html)
 ![R-CMD-check](https://img.shields.io/badge/R-package-blue.svg)
 ![Version](https://img.shields.io/badge/version-0.2.0-brightgreen.svg)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)
@@ -51,6 +51,7 @@
   - [Roadmap](#roadmap)
   - [如何添加新函数（开发者指南）](#如何添加新函数开发者指南)
   - [依赖](#依赖)
+  - [仓库访问统计](#仓库访问统计)
   - [作者与联系方式](#作者与联系方式)
   - [License](#license)
 
@@ -299,7 +300,7 @@ API，并把历史数据累积保存在 `traffic_report/` 中，从而突破官�
 Cardio-Pulmonary Institute (CPI) & Max Planck Institute for Heart and Lung Research & DZL DataLung School
 
 - ✉️ 邮箱：[Jian.Wu@mpi-bn.mpg.de](mailto:Jian.Wu@mpi-bn.mpg.de)
-- 🌐 个人网站：[jackng88.github.io](https://jackng88.github.io/index.html)
+- 🌐 个人网站：[jianwu-atlas.github.io](https://jianwu-atlas.github.io/index.html)
 - GitHub：[github.com/jianwu-atlas](https://github.com/jianwu-atlas)
 - Google Scholar：[scholar.google.com/citations?user=-pYIKQkAAAAJ](https://scholar.google.com/citations?user=-pYIKQkAAAAJ&hl)
 - ORCID：[0000-0003-4720-2374](https://orcid.org/0000-0003-4720-2374)
