@@ -51,7 +51,7 @@ jobs:
           GH_TOKEN: ${{ secrets.TRAFFIC_PAT }}
         run: |
           python fetch_github_traffic.py \
-            --owner JackNg88 \
+            --owner jianwu-atlas \
             --repo jwtools \
             --history-csv traffic_history.csv \
             --outdir traffic_report

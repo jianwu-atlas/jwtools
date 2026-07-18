@@ -12,7 +12,7 @@ fetch_github_traffic.py
 
 用法（本地测试）:
     export GH_TOKEN="你的GitHub Token"
-    python fetch_github_traffic.py --owner JackNg88 --repo jwtools \
+    python fetch_github_traffic.py --owner jianwu-atlas --repo jwtools \
         --history-csv traffic_history.csv --outdir ./traffic_report
 """
 
@@ -174,7 +174,7 @@ def generate_badge_json(combined: pd.DataFrame, outdir: str, days: int = 14):
 
 def main():
     parser = argparse.ArgumentParser(description="拉取并累积 GitHub 仓库 Traffic 数据，生成月度趋势图")
-    parser.add_argument("--owner", required=True, help="仓库所有者，如 JackNg88")
+    parser.add_argument("--owner", required=True, help="仓库所有者，如 jianwu-atlas")
     parser.add_argument("--repo", required=True, help="仓库名，如 jwtools")
     parser.add_argument("--history-csv", default="traffic_history.csv", help="历史数据 CSV 路径（会持续累积，需提交进仓库）")
     parser.add_argument("--outdir", default="./traffic_report", help="输出目录（月度汇总 + 趋势图）")

@@ -2,12 +2,12 @@
 
 # jwtools (Jian Wu's tools) <img src="man/figures/logo_hex.png" align="right" height="150" alt="jwtools logo" />
 
-[![Website](https://img.shields.io/badge/website-jackng88.github.io-blue.svg)](https://jackng88.github.io/index.html)
+[![Website](https://img.shields.io/badge/website-jianwu-atlas.github.io-blue.svg)](https://jianwu-atlas.github.io/index.html)
 ![R-CMD-check](https://img.shields.io/badge/R-package-blue.svg)
 ![Version](https://img.shields.io/badge/version-0.2.0-brightgreen.svg)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)
-[![Views](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/JackNg88/jwtools/main/traffic_report/badge_views.json)](https://github.com/JackNg88/jwtools/graphs/traffic)
-[![Clones](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/JackNg88/jwtools/main/traffic_report/badge_clones.json)](https://github.com/JackNg88/jwtools/graphs/traffic)
+[![Views](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/jianwu-atlas/jwtools/main/traffic_report/badge_views.json)](https://github.com/jianwu-atlas/jwtools/graphs/traffic)
+[![Clones](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/jianwu-atlas/jwtools/main/traffic_report/badge_clones.json)](https://github.com/jianwu-atlas/jwtools/graphs/traffic)
 
 `Jian Wu`'s Personal collection of reusable R utility functions for computational biology workflows.
 
@@ -106,11 +106,11 @@ devtools::install_local("path/to/jwtools")
 
 ```r
 install.packages("remotes")   # skip if already installed
-remotes::install_github("JackNg88/jwtools")
+remotes::install_github("jianwu-atlas/jwtools")
 ```
 
 Whenever a function is modified and pushed to GitHub, simply re-run
-`remotes::install_github("JackNg88/jwtools")` on any other machine to pull
+`remotes::install_github("jianwu-atlas/jwtools")` on any other machine to pull
 the latest version — no manual file copying needed.
 
 ---
@@ -255,7 +255,7 @@ devtools::check()      # optional: runs R CMD check to catch structural issues
 ```
 
 3. Commit and push to GitHub. On any other machine, re-run
-   `remotes::install_github("JackNg88/jwtools")` to pull the update.
+   `remotes::install_github("jianwu-atlas/jwtools")` to pull the update.
 
 This workflow means `NAMESPACE` and help files never need to be hand-edited —
 `devtools::document()` generates them automatically from the roxygen comments.
@@ -312,8 +312,8 @@ overcoming the API's native 14-day retention limit.
 Cardio-Pulmonary Institute (CPI) & Max Planck Institute for Heart and Lung Research & DZL DataLung School
 
 - ✉️ Email: [Jian.Wu@mpi-bn.mpg.de](mailto:Jian.Wu@mpi-bn.mpg.de)
-- 🌐 Homepage: [jackng88.github.io](https://jackng88.github.io/index.html)
-- GitHub: [github.com/JackNg88](https://github.com/JackNg88)
+- 🌐 Homepage: [jianwu-atlas.github.io](https://jianwu-atlas.github.io/index.html)
+- GitHub: [github.com/jianwu-atlas](https://github.com/jianwu-atlas)
 - Google Scholar: [scholar.google.com/citations?user=-pYIKQkAAAAJ](https://scholar.google.com/citations?user=-pYIKQkAAAAJ&hl)
 - ORCID: [0000-0003-4720-2374](https://orcid.org/0000-0003-4720-2374)
 - LinkedIn: [linkedin.com/in/jackng833](https://www.linkedin.com/in/jackng833/)
