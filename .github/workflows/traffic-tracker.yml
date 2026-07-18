@@ -1,0 +1,69 @@
+# .github/workflows/traffic-tracker.yml
+#
+# 定期拉取本仓库 GitHub Traffic 数据（views/clones），累积到 traffic_history.csv，
+# 并生成月度趋势图，自动提交回仓库。
+#
+# 使用方法：
+#   1. 把这个文件放到 jwtools 仓库的 .github/workflows/traffic-tracker.yml
+#   2. 把 fetch_github_traffic.py 放到仓库根目录（或 scripts/ 子目录，注意下面路径要对应改）
+#   3. 首次运行前手动触发一次（Actions 页面 -> 选中该 workflow -> Run workflow），
+#      验证权限、依赖安装、以及是否能成功抓取数据
+#
+# 定时策略：
+#   GitHub Traffic API 只保留最近 14 天数据，为避免遗漏，这里设置为每 10 天跑一次
+#   （cron: "0 2 */10 * *" —— 每10天的02:00 UTC 运行一次）
+#
+# 权限说明：
+#   默认的 secrets.GITHUB_TOKEN 在本仓库自身的 Actions 中运行时，
+#   通常已具备读取本仓库 Traffic 数据 + 提交回仓库的权限（因为 Action 运行身份
+#   对当前仓库视为有 push 权限）。如果实测发现 403，改用一个具有
+#   "Administration: Read" 权限的 fine-grained Personal Access Token，
+#   存为仓库 Secret（例如命名为 TRAFFIC_PAT），并把下面 env 里的
+#   GH_TOKEN 改为 ${{ secrets.TRAFFIC_PAT }}
+
+name: Track Repo Traffic
+
+on:
+  schedule:
+    - cron: "0 2 */10 * *"
+  workflow_dispatch: {}   # 允许手动触发，方便首次测试
+
+permissions:
+  contents: write
+
+jobs:
+  track-traffic:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests pandas matplotlib
+
+      - name: Fetch traffic data & update history
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python fetch_github_traffic.py \
+            --owner JackNg88 \
+            --repo jwtools \
+            --history-csv traffic_history.csv \
+            --outdir traffic_report
+
+      - name: Commit updated data & chart
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add traffic_history.csv traffic_report/
+          if git diff --cached --quiet; then
+            echo "没有新数据变化，跳过提交。"
+          else
+            git commit -m "chore: update traffic history + monthly trend [skip ci]"
+            git push
+          fi
