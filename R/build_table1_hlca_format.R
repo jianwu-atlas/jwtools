@@ -107,7 +107,8 @@ build_table1_hlca_format <- function(
     save_output = FALSE,
     output_dir = ".",
     output_prefix = "TableS1_HLCA_format"
-) {
+) { # <- 这里才是函数体开始
+  `%>%` <- dplyr::`%>%` # 应该插在这里, 大括号里面
 
   stopifnot(inherits(seurat_obj, "Seurat"))
   meta <- seurat_obj@meta.data

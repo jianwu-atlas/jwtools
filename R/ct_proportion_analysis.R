@@ -6,24 +6,10 @@
 #          任何需要"donor-level proportion + pairwise stats +
 #          batch/dataset overlay"的项目
 # Author: Jian Wu
+#
+# 依赖说明: 本函数内部调用了 save_dual() (定义于 R/save_dual.R),
+#           两个文件同属jwtools包内部, 调用时无需 jwtools:: 前缀
 # ============================================================
-
-#' 双格式保存 ggplot 对象（PDF + PNG）
-#'
-#' @param filename_prefix 不含扩展名的文件名前缀
-#' @param plot ggplot / patchwork 对象
-#' @param width,height 图形尺寸（inch）
-#' @param dpi PNG分辨率，默认300
-#' @param bg 背景色，默认white
-#' @export
-save_dual <- function(filename_prefix, plot, width, height,
-                      dpi = 300, bg = "white") {
-  ggplot2::ggsave(paste0(filename_prefix, ".pdf"), plot, width = width, height = height)
-  ggplot2::ggsave(paste0(filename_prefix, ".png"), plot, width = width, height = height,
-                  dpi = dpi, bg = bg)
-  message("  \u2705 \u5df2\u4fdd\u5b58: ", filename_prefix, ".pdf / .png")
-}
-
 
 #' 细胞类型比例的分组统计分析与可视化（支持dataset/batch overlay）
 #'
@@ -106,7 +92,7 @@ ct_proportion_analysis <- function(
 
   # ---- 依赖包检查 ----
   req_pkgs <- c("dplyr", "tidyr", "tibble", "ggplot2", "ggpubr",
-               "rstatix", "ggh4x", "ggrepel", "scales")
+                "rstatix", "ggh4x", "ggrepel", "scales")
   missing_pkgs <- req_pkgs[!vapply(req_pkgs, requireNamespace, logical(1), quietly = TRUE)]
   if (length(missing_pkgs) > 0) {
     stop("\u7f3a\u5c11\u4f9d\u8d56\u5305\uff0c\u8bf7\u5148\u5b89\u88c5: ",
@@ -217,7 +203,7 @@ ct_proportion_analysis <- function(
   if (verbose) {
     message("\n\u6bcf\u4e2acelltype\u7684sample\u6570 (\u6309group):")
     print(prop_df %>% dplyr::count(celltype, group) %>%
-           tidyr::pivot_wider(names_from = group, values_from = n, values_fill = 0))
+            tidyr::pivot_wider(names_from = group, values_from = n, values_fill = 0))
   }
 
   if (save_plots) {

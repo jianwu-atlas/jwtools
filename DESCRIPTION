@@ -24,6 +24,8 @@ Imports:
     ggplot2,
     ggpubr,
     ggrepel,
+    graphics,
+    grDevices,
     grid,
     openxlsx,
     qs2,

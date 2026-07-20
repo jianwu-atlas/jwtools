@@ -4,3 +4,7 @@
 ^\.github$
 ^\.gitignore$
 ^LICENSE\.md$
+^dev_notes$
+^fetch_github_traffic\.py$
+^traffic_history\.csv$
+^traffic_report$
