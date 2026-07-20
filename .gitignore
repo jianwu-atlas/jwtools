@@ -1,9 +1,9 @@
 # ============================================
 # jwtools — .gitignore
 # ============================================
-
 # ---- 完全私有文件，永不推送到 GitHub ----
 README-unpublic.md
+dev_notes/
 
 # ---- R 相关标准忽略项 ----
 .Rproj.user/
@@ -15,11 +15,50 @@ README-unpublic.md
 # ---- R 包构建产物 ----
 *.tar.gz
 *.Rcheck/
+/doc/
+/Meta/
 
-# ---- macOS 系统文件 ----
+# ---- Python（如涉及 reticulate/配套脚本）----
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# ---- 操作系统文件 ----
 .DS_Store
 **/.DS_Store
+Thumbs.db
+Desktop.ini
 
-# ---- 大型中间数据文件（按需保留或删除这行）----
+# ---- 日志与临时文件 ----
+*.log
+*.tmp
+*.bak
+~$*
+err.txt
+out.txt
+**/err.txt
+**/out.txt
+
+# ---- 大型生信中间数据（按需保留）----
 *.qs2
-dev_notes/
+*.h5ad
+*.h5
+*.loom
+*.rds
+*.RDS
+*.rda
+*.bam
+*.bai
+*.fastq.gz
+*.fq.gz
+
+# ---- 通用输出目录 ----
+outputs/
+results/
+figures/
+cache/
+tmp/
+temp/
+

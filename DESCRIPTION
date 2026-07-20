@@ -1,7 +1,7 @@
 Package: jwtools
 Type: Package
 Title: Jian Wu's Personal R Utility Functions
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: person("Jian", "Wu", email = "Jian.Wu@mpi-bn.mpg.de",
     role = c("aut", "cre"))
 Description: 个人科研常用小工具函数集合，方便以后直接 library(jwtools) 导入，
@@ -12,8 +12,9 @@ Description: 个人科研常用小工具函数集合，方便以后直接 librar
     检验（Kruskal-Wallis + 两两 Wilcoxon）与可视化，支持 dataset/batch
     来源的散点叠加诊断；rename_dataset_origin()，用于将 Seurat 对象
     metadata 中的 dataset_origin 标准化为 "FirstAuthor_Year" 引用格式；
-    以及 save_dual()，用于同时保存 PDF + PNG 双格式图片。以后新写的
-    小工具函数可以继续往 R/ 目录里加。
+    load_te_family_annotation()，用于加载并校验转座元件(TE) family/class
+    映射注释表，含重复/冲突检测与分布概览；以及 save_dual()，用于同时
+    保存 PDF + PNG 双格式图片。以后新写的小工具函数可以继续往 R/ 目录里加。
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -27,6 +28,8 @@ Imports:
     openxlsx,
     qs2,
     RColorBrewer,
+    readr,
+    rlang,
     rstatix,
     scales,
     Seurat,
