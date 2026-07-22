@@ -2,7 +2,7 @@
 # File: R/ct_proportion_analysis.R
 # Package: jwtools
 # Purpose: 通用化的"细胞类型比例 × 分组变量"统计可视化函数
-#          可复用于 LungAgingERV / LungERVIPF / PH-ERVAtlas 等
+#          可复用于所有 Atlas 等
 #          任何需要"donor-level proportion + pairwise stats +
 #          batch/dataset overlay"的项目
 # Author: Jian Wu
