@@ -1,7 +1,7 @@
 Package: jwtools
 Type: Package
 Title: Jian Wu's Personal R Utility Functions
-Version: 0.2.1
+Version: 0.2.2
 Authors@R: person("Jian", "Wu", email = "Jian.Wu@mpi-bn.mpg.de",
     role = c("aut", "cre"))
 Description: 个人科研常用小工具函数集合，方便以后直接 library(jwtools) 导入，
