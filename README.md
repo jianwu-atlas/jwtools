@@ -57,6 +57,7 @@ into modular and reusable scripts**, so that:
   - [Roadmap](#roadmap)
   - [Adding New Functions (Developer Guide)](#adding-new-functions-developer-guide)
   - [Dependencies](#dependencies)
+  - [Python 工具](#python-工具)
   - [Repo Traffic](#repo-traffic)
   - [Author \& Contact](#author--contact)
   - [License](#license)
@@ -292,6 +293,13 @@ dependencies as they are implemented, e.g. `Seurat` (>= 5.0.0), `DESeq2`,
 `ChIPseeker`, `Squidpy`/`Giotto` interfaces, and `ComplexHeatmap`. These
 will be documented per-function via roxygen2 `@importFrom` tags and
 reflected in `DESCRIPTION` at that time.
+
+---
+
+## Python 工具
+
+`python/` 目录提供配套的 Python 可视化模块，详见
+[python/README.md](python/README.md)。
 
 ---
 
