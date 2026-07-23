@@ -57,7 +57,7 @@ out.txt
 # ---- 通用输出目录 ----
 outputs/
 results/
-figures/
+#figures/
 cache/
 tmp/
 temp/
