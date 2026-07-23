@@ -5,7 +5,7 @@ Version: 0.2.2
 Authors@R: person("Jian", "Wu", email = "Jian.Wu@mpi-bn.mpg.de",
     role = c("aut", "cre"))
 Description: 个人科研常用小工具函数集合，方便以后直接 library(jwtools) 导入，
-    不用每次都从旧脚本里复制粘贴。当前包含用 qs2 保存/恢复整个 R 工作环境
+    不用每次都从旧脚本里复制粘贴. 当前包含用 qs2 保存/恢复整个 R 工作环境
     的 qs_save_workspace() / qs_load_workspace()（等价于更快、更小的
     save()/load()，适合装有 Seurat 对象的大型单细胞分析环境）；
     ct_proportion_analysis()，用于 donor-level 细胞类型比例的分组统计
@@ -14,7 +14,7 @@ Description: 个人科研常用小工具函数集合，方便以后直接 librar
     metadata 中的 dataset_origin 标准化为 "FirstAuthor_Year" 引用格式；
     load_te_family_annotation()，用于加载并校验转座元件(TE) family/class
     映射注释表，含重复/冲突检测与分布概览；以及 save_dual()，用于同时
-    保存 PDF + PNG 双格式图片。以后新写的小工具函数可以继续往 R/ 目录里加。
+    保存 PDF + PNG 双格式图片. 以后新写的小工具函数可以继续往 R/ 目录里加. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
